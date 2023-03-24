@@ -1,27 +1,27 @@
-import { outputAst } from '@angular/compiler';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Recipe } from '../recipe.model';
+import { RecipeService } from '../recipe.service';
 
 @Component({
   selector: 'app-recipe-list',
   templateUrl: './recipe-list.component.html',
   styleUrls: ['./recipe-list.component.css']
+
 })
 export class RecipeListComponent implements OnInit {
-   @Output() recipeWasSelected = new EventEmitter<Recipe>();
 
-  recipes: Recipe[] = [
-    new Recipe('Test Recipe', 'simply a test', 'https://i0.wp.com/www.vegetarianventures.com/wp-content/uploads/2018/12/ChickpeaNoodleSoupBlog-14-of-15.jpg?fit=1013%2C1520&ssl=1'),
-    new Recipe('Test Recipe', 'simply a test', 'https://i0.wp.com/www.vegetarianventures.com/wp-content/uploads/2018/12/ChickpeaNoodleSoupBlog-14-of-15.jpg?fit=1013%2C1520&ssl=1'),
-    new Recipe('Test Recipe', 'simply a test', 'https://i0.wp.com/www.vegetarianventures.com/wp-content/uploads/2018/12/ChickpeaNoodleSoupBlog-14-of-15.jpg?fit=1013%2C1520&ssl=1')
+  recipes:Recipe[];
 
-
-  ];
-  constructor() { }
+  constructor(private recipeService: RecipeService,
+    private router: Router,
+    private route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.recipes = this.recipeService.getRecipes();
   }
-  onRecipeSelected(recipe: Recipe){
-    this.recipeWasSelected.emit(recipe);
+
+  onNewRecipe(){
+    this.router.navigate(['new'], {relativeTo: this.route});
   }
 }
